@@ -181,39 +181,28 @@ defmodule Day11 do
     do:
       if(worry_divisor == 1,
         do:
-          do_round(
-            Enum.into(
-              Enum.map(
-                monkeys,
-                fn {k, v} -> {k, %Monkey{v | items: Qex.new(Multimod.new_list(v.items))}} end
-              ),
-              %{}
-            ),
-            worry_divisor,
-            rounds
-          ),
+          monkeys
+          |> Enum.map(fn {k, v} ->
+            {k, %Monkey{v | items: Qex.new(Multimod.new_list(v.items))}}
+          end)
+          |> Enum.into(%{})
+          |> do_round(worry_divisor, rounds),
         else:
-          do_round(
-            Enum.into(
-              Enum.map(
-                monkeys,
-                fn {k, v} ->
-                  {k, %Monkey{v | items: Qex.new(Multimod.new_list_with_val(v.items))}}
-                end
-              ),
-              %{}
-            ),
-            worry_divisor,
-            rounds
-          )
+          monkeys
+          |> Enum.map(fn {k, v} ->
+            {k, %Monkey{v | items: Qex.new(Multimod.new_list_with_val(v.items))}}
+          end)
+          |> Enum.into(%{})
+          |> do_round(worry_divisor, rounds)
       )
 
   def do_round(monkeys, _, 0), do: monkeys
 
-  def do_round(monkeys, worry_divisor, rounds_remaining) do
-    IO.puts(rounds_remaining)
-    do_round(do_turn(monkeys, worry_divisor, 0), worry_divisor, rounds_remaining - 1)
-  end
+  def do_round(monkeys, worry_divisor, rounds_remaining),
+    do:
+      monkeys
+      |> do_turn(worry_divisor, 0)
+      |> do_round(worry_divisor, rounds_remaining - 1)
 
   def do_turn(monkeys, _, id) when id == map_size(monkeys), do: monkeys
 

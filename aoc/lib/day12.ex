@@ -74,7 +74,8 @@ defmodule Day12 do
       find_neighbours(point)
       |> Enum.filter(&Map.has_key?(heights, &1))
       |> Enum.reduce({costs, []}, fn neighbour, {costs, updated_points} ->
-        {neighbour_height, neighbour_cost} = {Map.get(heights, neighbour), Map.get(costs, neighbour)}
+        {neighbour_height, neighbour_cost} =
+          {Map.get(heights, neighbour), Map.get(costs, neighbour)}
 
         cond do
           neighbour_height <= current_height + 1 and neighbour_cost > current_cost + 1 ->
@@ -92,7 +93,14 @@ defmodule Day12 do
 
   defp reverse_shortest_path({heights, costs, start_point, end_point}) do
     minimums = heights |> Enum.filter(fn {_, v} -> v == ?a end) |> Enum.map(fn {k, _} -> k end)
-    costs = do_reverse_shortest_path(heights, costs |> Map.put(start_point, 1_000_000) |> Map.put(end_point, 0), [end_point])
+
+    costs =
+      do_reverse_shortest_path(
+        heights,
+        costs |> Map.put(start_point, 1_000_000) |> Map.put(end_point, 0),
+        [end_point]
+      )
+
     costs |> Map.take(minimums) |> Map.values() |> Enum.min()
   end
 
@@ -105,7 +113,8 @@ defmodule Day12 do
       find_neighbours(point)
       |> Enum.filter(&Map.has_key?(heights, &1))
       |> Enum.reduce({costs, []}, fn neighbour, {costs, updated_points} ->
-        {neighbour_height, neighbour_cost} = {Map.get(heights, neighbour), Map.get(costs, neighbour)}
+        {neighbour_height, neighbour_cost} =
+          {Map.get(heights, neighbour), Map.get(costs, neighbour)}
 
         cond do
           neighbour_height >= current_height - 1 and neighbour_cost > current_cost + 1 ->
@@ -116,7 +125,10 @@ defmodule Day12 do
         end
       end)
 
-    do_reverse_shortest_path(heights, costs, MapSet.to_list(MapSet.new(points_to_consider ++ tail)))
+    do_reverse_shortest_path(
+      heights,
+      costs,
+      MapSet.to_list(MapSet.new(points_to_consider ++ tail))
+    )
   end
-
 end

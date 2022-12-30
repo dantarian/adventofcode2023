@@ -35,20 +35,6 @@ defmodule ValveAgent do
   defstruct location: "AA", previous: nil, best_node_scores: %{}
 end
 
-defmodule BestResult do
-  use Agent
-
-  def start_link(initial_value), do: Agent.start_link(fn -> initial_value end, name: __MODULE__)
-
-  def value, do: Agent.get(__MODULE__, fn state -> state end)
-
-  def put_if_greater(candidate),
-    do:
-      Agent.update(__MODULE__, fn state ->
-        if candidate > state, do: IO.inspect(candidate), else: state
-      end)
-end
-
 defmodule TwoAgentState do
   defstruct [:agent1, :agent2, :valves, :turns_remaining, value: 0]
 

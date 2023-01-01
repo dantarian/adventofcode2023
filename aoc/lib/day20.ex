@@ -129,10 +129,11 @@ defmodule DoublyLinkedMap do
         new_key + 1
       )
 
-  def take_indexed(%DoublyLinkedMap{map: map}, indices), do:
-    indices 
-    |> Enum.map(&Integer.mod(&1, map_size(map)))
-    |> Enum.map(&(map[&1].value))
+  def take_indexed(%DoublyLinkedMap{map: map}, indices),
+    do:
+      indices
+      |> Enum.map(&Integer.mod(&1, map_size(map)))
+      |> Enum.map(&map[&1].value)
 end
 
 defmodule Day20 do
@@ -155,7 +156,7 @@ defmodule Day20 do
       |> File.read!()
       |> String.split("\n")
       |> Enum.map(&String.to_integer/1)
-      |> Enum.map(&(&1 * 811589153))
+      |> Enum.map(&(&1 * 811_589_153))
       |> Enum.with_index()
       |> DoublyLinkedMap.new()
       |> DoublyLinkedMap.mix()

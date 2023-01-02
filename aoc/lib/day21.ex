@@ -65,63 +65,70 @@ defmodule MonkeyOp do
 end
 
 defmodule Day21 do
-  def part1(file), do:
-    file
-    |> File.read!()
-    |> String.split("\n")
-    |> Enum.map(&parse/1)
-    |> Enum.into(%{})
-    |> then(fn m -> m["root"].(m) end)
+  def part1(file),
+    do:
+      file
+      |> File.read!()
+      |> String.split("\n")
+      |> Enum.map(&parse/1)
+      |> Enum.into(%{})
+      |> then(fn m -> m["root"].(m) end)
 
-  def part2(file), do:
-    file
-    |> File.read!()
-    |> String.split("\n")
-    |> Enum.map(&parse_advanced/1)
-    |> Enum.into(%{})
-    |> then(fn m -> MonkeyOp.solve(m) end)
+  def part2(file),
+    do:
+      file
+      |> File.read!()
+      |> String.split("\n")
+      |> Enum.map(&parse_advanced/1)
+      |> Enum.into(%{})
+      |> then(fn m -> MonkeyOp.solve(m) end)
 
-  defp parse(line), do:
-    line
-    |> String.split(": ")
-    |> then(fn [label, definition] -> {label, parse_definition(definition)} end)
+  defp parse(line),
+    do:
+      line
+      |> String.split(": ")
+      |> then(fn [label, definition] -> {label, parse_definition(definition)} end)
 
-  defp parse_definition(<<operand1::bytes-size(4), " + ", operand2::bytes-size(4)>>), do:
-    fn m -> m[operand1].(m) + m[operand2].(m) end
+  defp parse_definition(<<operand1::bytes-size(4), " + ", operand2::bytes-size(4)>>),
+    do: fn m -> m[operand1].(m) + m[operand2].(m) end
 
-  defp parse_definition(<<operand1::bytes-size(4), " - ", operand2::bytes-size(4)>>), do:
-    fn m -> m[operand1].(m) - m[operand2].(m) end
+  defp parse_definition(<<operand1::bytes-size(4), " - ", operand2::bytes-size(4)>>),
+    do: fn m -> m[operand1].(m) - m[operand2].(m) end
 
-  defp parse_definition(<<operand1::bytes-size(4), " * ", operand2::bytes-size(4)>>), do:
-    fn m -> m[operand1].(m) * m[operand2].(m) end
+  defp parse_definition(<<operand1::bytes-size(4), " * ", operand2::bytes-size(4)>>),
+    do: fn m -> m[operand1].(m) * m[operand2].(m) end
 
-  defp parse_definition(<<operand1::bytes-size(4), " / ", operand2::bytes-size(4)>>), do:
-    fn m -> div(m[operand1].(m), m[operand2].(m)) end
+  defp parse_definition(<<operand1::bytes-size(4), " / ", operand2::bytes-size(4)>>),
+    do: fn m -> div(m[operand1].(m), m[operand2].(m)) end
 
   defp parse_definition(str), do: fn _ -> String.to_integer(str) end
 
-  defp parse_advanced(line), do:
-    line
-    |> String.split(": ")
-    |> then(fn [label, definition] -> {label, parse_def_adv(label, definition)} end)
-  
-  defp parse_def_adv("root", <<operand1::bytes-size(4), _::bytes-size(3), operand2::bytes-size(4)>>), do:
-    %MonkeyOp{operation: :equal, operand1: operand1, operand2: operand2}
+  defp parse_advanced(line),
+    do:
+      line
+      |> String.split(": ")
+      |> then(fn [label, definition] -> {label, parse_def_adv(label, definition)} end)
 
-  defp parse_def_adv("humn", _), do:
-    %MonkeyOp{operation: :unknown, operand1: []}
+  defp parse_def_adv(
+         "root",
+         <<operand1::bytes-size(4), _::bytes-size(3), operand2::bytes-size(4)>>
+       ),
+       do: %MonkeyOp{operation: :equal, operand1: operand1, operand2: operand2}
 
-  defp parse_def_adv(_, <<operand1::bytes-size(4), " + ", operand2::bytes-size(4)>>), do:
-    %MonkeyOp{operation: :add, operand1: operand1, operand2: operand2}
+  defp parse_def_adv("humn", _), do: %MonkeyOp{operation: :unknown, operand1: []}
 
-  defp parse_def_adv(_, <<operand1::bytes-size(4), " - ", operand2::bytes-size(4)>>), do:
-    %MonkeyOp{operation: :subtract, operand1: operand1, operand2: operand2}
+  defp parse_def_adv(_, <<operand1::bytes-size(4), " + ", operand2::bytes-size(4)>>),
+    do: %MonkeyOp{operation: :add, operand1: operand1, operand2: operand2}
 
-  defp parse_def_adv(_, <<operand1::bytes-size(4), " * ", operand2::bytes-size(4)>>), do:
-    %MonkeyOp{operation: :multiply, operand1: operand1, operand2: operand2}
+  defp parse_def_adv(_, <<operand1::bytes-size(4), " - ", operand2::bytes-size(4)>>),
+    do: %MonkeyOp{operation: :subtract, operand1: operand1, operand2: operand2}
 
-  defp parse_def_adv(_, <<operand1::bytes-size(4), " / ", operand2::bytes-size(4)>>), do:
-    %MonkeyOp{operation: :divide, operand1: operand1, operand2: operand2}
+  defp parse_def_adv(_, <<operand1::bytes-size(4), " * ", operand2::bytes-size(4)>>),
+    do: %MonkeyOp{operation: :multiply, operand1: operand1, operand2: operand2}
 
-  defp parse_def_adv(_, str), do: %MonkeyOp{operation: :constant, operand1: String.to_integer(str)}
+  defp parse_def_adv(_, <<operand1::bytes-size(4), " / ", operand2::bytes-size(4)>>),
+    do: %MonkeyOp{operation: :divide, operand1: operand1, operand2: operand2}
+
+  defp parse_def_adv(_, str),
+    do: %MonkeyOp{operation: :constant, operand1: String.to_integer(str)}
 end

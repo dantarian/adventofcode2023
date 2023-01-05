@@ -42,13 +42,14 @@ defmodule Day23 do
 
   defp move(elves, _, 0), do: elves
 
-  defp move(elves, direction, turns_remaining), 
+  defp move(elves, direction, turns_remaining),
     do: move(do_move(elves, direction), next_direction(direction), turns_remaining - 1)
 
   def move_until_done(elves, direction, turns_taken \\ 1) do
     new_elves = do_move(elves, direction)
-    if MapSet.equal?(elves, new_elves), 
-      do: turns_taken, 
+
+    if MapSet.equal?(elves, new_elves),
+      do: turns_taken,
       else: move_until_done(new_elves, next_direction(direction), turns_taken + 1)
   end
 
@@ -119,25 +120,29 @@ defmodule Day23 do
     end
   end
 
-  defp can_move_north?({x, y}, elves), do:
-    !MapSet.member?(elves, {x - 1, y - 1}) and 
-    !MapSet.member?(elves, {x, y - 1}) and
-    !MapSet.member?(elves, {x + 1, y - 1})
+  defp can_move_north?({x, y}, elves),
+    do:
+      !MapSet.member?(elves, {x - 1, y - 1}) and
+        !MapSet.member?(elves, {x, y - 1}) and
+        !MapSet.member?(elves, {x + 1, y - 1})
 
-  defp can_move_south?({x, y}, elves), do:
-    !MapSet.member?(elves, {x - 1, y + 1}) and 
-    !MapSet.member?(elves, {x, y + 1}) and
-    !MapSet.member?(elves, {x + 1, y + 1})
+  defp can_move_south?({x, y}, elves),
+    do:
+      !MapSet.member?(elves, {x - 1, y + 1}) and
+        !MapSet.member?(elves, {x, y + 1}) and
+        !MapSet.member?(elves, {x + 1, y + 1})
 
-  defp can_move_west?({x, y}, elves), do:
-    !MapSet.member?(elves, {x - 1, y - 1}) and 
-    !MapSet.member?(elves, {x - 1, y}) and
-    !MapSet.member?(elves, {x - 1, y + 1})
+  defp can_move_west?({x, y}, elves),
+    do:
+      !MapSet.member?(elves, {x - 1, y - 1}) and
+        !MapSet.member?(elves, {x - 1, y}) and
+        !MapSet.member?(elves, {x - 1, y + 1})
 
-  defp can_move_east?({x, y}, elves), do:
-    !MapSet.member?(elves, {x + 1, y - 1}) and 
-    !MapSet.member?(elves, {x + 1, y}) and
-    !MapSet.member?(elves, {x + 1, y + 1})
+  defp can_move_east?({x, y}, elves),
+    do:
+      !MapSet.member?(elves, {x + 1, y - 1}) and
+        !MapSet.member?(elves, {x + 1, y}) and
+        !MapSet.member?(elves, {x + 1, y + 1})
 
   defp empty_area(elves) do
     {{minx, _}, {maxx, _}} = Enum.min_max_by(elves, fn {x, _} -> x end)

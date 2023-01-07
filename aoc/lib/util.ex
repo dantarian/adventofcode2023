@@ -15,5 +15,25 @@ defmodule BestResult do
         if candidate > state, do: IO.inspect(candidate), else: state
       end)
 
+  def put_if_lesser(candidate),
+    do:
+      Agent.update(__MODULE__, fn state ->
+        if candidate < state, do: IO.inspect(candidate), else: state
+      end)
+
+  def stop, do: Agent.stop(__MODULE__)
+end
+
+defmodule Cache do
+  use Agent
+
+  def start_link(), do: Agent.start_link(fn -> %{} end, name: __MODULE__)
+
+  def has_key?(key), do: Agent.get(__MODULE__, fn map -> Map.has_key?(map, key) end)
+
+  def get(key), do: Agent.get(__MODULE__, fn map -> Map.get(map, key) end)
+
+  def put(key, value), do: Agent.update(__MODULE__, fn map -> Map.put(map, key, value) end)
+
   def stop, do: Agent.stop(__MODULE__)
 end

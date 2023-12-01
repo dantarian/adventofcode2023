@@ -1,10 +1,19 @@
 {
-  "build": { "dockerfile": "Dockerfile" },
-  "extensions": [
-    "jakebecker.elixir-ls",
-    "eamodio.gitlens",
-    "streetsidesoftware.code-spell-checker"
-  ],
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "jakebecker.elixir-ls",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "elixirLS.projectDir": "/workspaces/adventofcode2023/aoc"
+      }
+    }
+  },
   "forwardPorts": [
     4000
   ]

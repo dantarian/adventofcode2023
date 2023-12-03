@@ -45,32 +45,32 @@ defmodule Day1 do
   defp do_line_text_digits([c | rest], first, _) when c >= ?0 and c <= ?9,
     do: do_line_text_digits(rest, first, c)
 
-  defp do_line_text_digits([?o | [?n | [?e | rest]]], first, last),
-    do: do_line_text_digits([?1 | [?e | rest]], first, last)
+  defp do_line_text_digits(~c"one" ++ rest, first, last),
+    do: do_line_text_digits(~c"1e" ++ rest, first, last)
 
-  defp do_line_text_digits([?t | [?w | [?o | rest]]], first, last),
-    do: do_line_text_digits([?2 | [?o | rest]], first, last)
+  defp do_line_text_digits(~c"two" ++ rest, first, last),
+    do: do_line_text_digits(~c"2o" ++ rest, first, last)
 
-  defp do_line_text_digits([?t | [?h | [?r | [?e | [?e | rest]]]]], first, last),
-    do: do_line_text_digits([?3 | [?e | rest]], first, last)
+  defp do_line_text_digits(~c"three" ++ rest, first, last),
+    do: do_line_text_digits(~c"3e" ++ rest, first, last)
 
-  defp do_line_text_digits([?f | [?o | [?u | [?r | rest]]]], first, last),
-    do: do_line_text_digits([?4 | rest], first, last)
+  defp do_line_text_digits(~c"four" ++ rest, first, last),
+    do: do_line_text_digits(~c"4" ++ rest, first, last)
 
-  defp do_line_text_digits([?f | [?i | [?v | [?e | rest]]]], first, last),
-    do: do_line_text_digits([?5 | [?e | rest]], first, last)
+  defp do_line_text_digits(~c"five" ++ rest, first, last),
+    do: do_line_text_digits(~c"5e" ++ rest, first, last)
 
-  defp do_line_text_digits([?s | [?i | [?x | rest]]], first, last),
-    do: do_line_text_digits([?6 | rest], first, last)
+  defp do_line_text_digits(~c"six" ++ rest, first, last),
+    do: do_line_text_digits(~c"6" ++ rest, first, last)
 
-  defp do_line_text_digits([?s | [?e | [?v | [?e | [?n | rest]]]]], first, last),
-    do: do_line_text_digits([?7 | [?n | rest]], first, last)
+  defp do_line_text_digits(~c"seven" ++ rest, first, last),
+    do: do_line_text_digits(~c"7n" ++ rest, first, last)
 
-  defp do_line_text_digits([?e | [?i | [?g | [?h | [?t | rest]]]]], first, last),
-    do: do_line_text_digits([?8 | [?t | rest]], first, last)
+  defp do_line_text_digits(~c"eight" ++ rest, first, last),
+    do: do_line_text_digits(~c"8t" ++ rest, first, last)
 
-  defp do_line_text_digits([?n | [?i | [?n | [?e | rest]]]], first, last),
-    do: do_line_text_digits([?9 | [?e | rest]], first, last)
+  defp do_line_text_digits(~c"nine" ++ rest, first, last),
+    do: do_line_text_digits(~c"9e" ++ rest, first, last)
 
   defp do_line_text_digits([_ | rest], first, last), do: do_line_text_digits(rest, first, last)
 end

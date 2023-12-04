@@ -55,7 +55,7 @@ defmodule EngineSchematic do
     |> Enum.filter(fn {_, c} -> c == ?* end)
     |> Enum.map(fn {addr, _} -> connected_parts(schematic, addr) end)
     |> Enum.filter(fn list -> length(list) == 2 end)
-    |> Enum.map(fn [a | [b | []]] -> a * b end)
+    |> Enum.map(&Enum.product(&1))
     |> Enum.sum()
   end
 

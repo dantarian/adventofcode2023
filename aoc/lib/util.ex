@@ -1,6 +1,7 @@
 defmodule AOCUtil do
   def manhattan({ax, ay}, {bx, by}), do: abs(ax - bx) + abs(ay - by)
   def lines!(file), do: file |> File.read!() |> String.split("\n")
+  def blocks!(file), do: file |> File.read!() |> String.split("\n\n")
 end
 
 defmodule BestResult do

@@ -21,7 +21,7 @@ defmodule Day4 do
     file
     |> AOCUtil.lines!()
     |> Enum.reverse()
-    |> Enum.reduce(%{}, fn line, acc -> 
+    |> Enum.reduce(%{}, fn line, acc ->
       [id, content | []] = String.split(line, ": ")
       [_, id | []] = String.split(id)
       id = String.to_integer(id)
@@ -29,11 +29,15 @@ defmodule Day4 do
       winners = winners |> String.split() |> MapSet.new()
       candidates = candidates |> String.split() |> MapSet.new()
       matches = MapSet.intersection(winners, candidates) |> MapSet.to_list() |> length()
-      
-      Map.put(acc, id, case matches do
-        0 -> 1
-        n -> 1 + ((for x <- (id + 1)..(id + n), do: Map.get(acc, x)) |> Enum.sum())
-      end)
+
+      Map.put(
+        acc,
+        id,
+        case matches do
+          0 -> 1
+          n -> 1 + (for(x <- (id + 1)..(id + n), do: Map.get(acc, x)) |> Enum.sum())
+        end
+      )
     end)
     |> Map.values()
     |> Enum.sum()

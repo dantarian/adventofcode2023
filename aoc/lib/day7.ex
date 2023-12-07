@@ -33,7 +33,7 @@ defmodule Day7 do
 
   @hands %{
     [5 | []] => 7,
-    [4, 1| []] => 6,
+    [4, 1 | []] => 6,
     [3, 2 | []] => 5,
     [3, 1, 1 | []] => 4,
     [2, 2, 1 | []] => 3,
@@ -41,38 +41,60 @@ defmodule Day7 do
     [1, 1, 1, 1, 1 | []] => 1
   }
 
-  def part1(file), do:
-    file
-    |> AOCUtil.lines!()
-    |> Enum.reject(fn x -> x == "" end)
-    |> Enum.map(fn line -> line |> String.split() |> then(fn [hand, bid] -> {parse_hand(hand), String.to_integer(bid)} end) end)
-    |> Enum.sort()
-    |> Enum.with_index(1)
-    |> Enum.reduce(0, fn {{_, bid}, index}, acc -> acc + bid * index end)
+  def part1(file),
+    do:
+      file
+      |> AOCUtil.lines!()
+      |> Enum.reject(fn x -> x == "" end)
+      |> Enum.map(fn line ->
+        line
+        |> String.split()
+        |> then(fn [hand, bid] -> {parse_hand(hand), String.to_integer(bid)} end)
+      end)
+      |> Enum.sort()
+      |> Enum.with_index(1)
+      |> Enum.reduce(0, fn {{_, bid}, index}, acc -> acc + bid * index end)
 
-  defp parse_hand(hand), do:
-    hand
-    |> String.to_charlist()
-    |> Enum.map(fn x -> @cards[x] end)
-    |> then(fn list -> [@hands[Enum.frequencies(list) |> Enum.map(fn {_, b} -> b end) |> Enum.sort(:desc)] | list] end)
+  defp parse_hand(hand),
+    do:
+      hand
+      |> String.to_charlist()
+      |> Enum.map(fn x -> @cards[x] end)
+      |> then(fn list ->
+        [
+          @hands[Enum.frequencies(list) |> Enum.map(fn {_, b} -> b end) |> Enum.sort(:desc)]
+          | list
+        ]
+      end)
 
-  def part2(file), do:
-    file
-    |> AOCUtil.lines!()
-    |> Enum.reject(fn x -> x == "" end)
-    |> Enum.map(fn line -> line |> String.split() |> then(fn [hand, bid] -> {parse_hand2(hand), String.to_integer(bid)} end) end)
-    |> Enum.sort()
-    |> Enum.with_index(1)
-    |> Enum.reduce(0, fn {{_, bid}, index}, acc -> acc + bid * index end)
+  def part2(file),
+    do:
+      file
+      |> AOCUtil.lines!()
+      |> Enum.reject(fn x -> x == "" end)
+      |> Enum.map(fn line ->
+        line
+        |> String.split()
+        |> then(fn [hand, bid] -> {parse_hand2(hand), String.to_integer(bid)} end)
+      end)
+      |> Enum.sort()
+      |> Enum.with_index(1)
+      |> Enum.reduce(0, fn {{_, bid}, index}, acc -> acc + bid * index end)
 
-  defp parse_hand2(hand), do:
-    hand
-    |> String.to_charlist()
-    |> Enum.map(fn x -> @cards2[x] end)
-    |> then(fn list ->
-      jokers = list |> Enum.count(fn x -> x == 0 end)
-      [@hands[Enum.frequencies(list) |> Enum.map(fn {_, b} -> b end) |> Enum.sort(:desc)] |> apply_jokers(jokers) | list] 
-    end)
+  defp parse_hand2(hand),
+    do:
+      hand
+      |> String.to_charlist()
+      |> Enum.map(fn x -> @cards2[x] end)
+      |> then(fn list ->
+        jokers = list |> Enum.count(fn x -> x == 0 end)
+
+        [
+          @hands[Enum.frequencies(list) |> Enum.map(fn {_, b} -> b end) |> Enum.sort(:desc)]
+          |> apply_jokers(jokers)
+          | list
+        ]
+      end)
 
   defp apply_jokers(x, 0), do: x
   defp apply_jokers(7, _), do: 7

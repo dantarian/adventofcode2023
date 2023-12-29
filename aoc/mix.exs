@@ -26,7 +26,9 @@ defmodule Aoc.MixProject do
       {:qex, "~> 0.5"},
       {:jason, "~> 1.3"},
       {:math, "~> 0.7"},
-      {:levenshtein, "~> 0.3"}
+      {:levenshtein, "~> 0.3"},
+      {:avl_tree, "~> 1.0"},
+      {:heap, "~> 3.0"}
     ]
   end
 end
